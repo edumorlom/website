@@ -18,7 +18,7 @@ import React from "react";
 import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 import Enzyme, { mount } from "enzyme";
-import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
+import Adapter from "enzyme-adapter-react-16";
 import pretty from "pretty";
 
 import { Menu } from "./statsvar_menu";

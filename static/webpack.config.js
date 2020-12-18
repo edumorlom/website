@@ -16,63 +16,57 @@
 
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
-const FixStyleOnlyEntriesPlugin = require("webpack-remove-empty-scripts");
-const WebpackShellPlugin = require("webpack-shell-plugin-next");
+const FixStyleOnlyEntriesPlugin = require("webpack-fix-style-only-entries");
+const WebpackShellPlugin = require("webpack-shell-plugin");
 
 const config = {
   entry: {
     // TODO(intrepiditee): Rename to scatter when ready.
     scatter2: [
-      path.resolve(__dirname, "/js/tools/scatter2/scatter2.ts"),
-      path.resolve(__dirname, "/css/tools/scatter2.scss")
+      __dirname + "/js/tools/scatter2/scatter2.ts",
+      __dirname + "/css/tools/scatter2.scss",
     ],
     choropleth: [
-      path.resolve(__dirname, "/js/tools/choropleth/choropleth_template.tsx"),
-      path.resolve(__dirname, "/css/tools/choropleth.scss")
+      __dirname + "/js/tools/choropleth/choropleth_template.tsx",
+      __dirname + "/css/tools/choropleth.scss",
     ],
-    dev: [
-      path.resolve(__dirname, "/js/dev.ts"),
-      path.resolve(__dirname, "/css/dev.scss")
-    ],
+    dev: [__dirname + "/js/dev.ts", __dirname + "/css/dev.scss"],
     timeline: [
-      path.resolve(__dirname, "/js/tools/timeline.ts"),
-      path.resolve(__dirname, "/css/timeline.scss")
+      __dirname + "/js/tools/timeline.ts",
+      __dirname + "/css/timeline.scss",
     ],
     kg: [
       "babel-polyfill",
-      path.resolve(__dirname,  "/js/browser/kg.js"),
-      path.resolve(__dirname, "/css/kg.scss")
+      __dirname + "/js/browser/kg.js",
+      __dirname + "/css/kg.scss",
     ],
-    mcf_playground: path.resolve(__dirname, "/js/mcf_playground.js"),
+    mcf_playground: __dirname + "/js/mcf_playground.js",
     place: [
-      path.resolve(__dirname, "/js/place/place.ts"),
-      path.resolve(__dirname, "/css/place/place.scss"),
+      __dirname + "/js/place/place.ts",
+      __dirname + "/css/place/place.scss",
     ],
-    place_landing: [path.resolve(__dirname, "/js/place/place_landing.ts")],
+    place_landing: [__dirname + "/js/place/place_landing.ts"],
     ranking: [
-      path.resolve(__dirname, "/js/ranking/ranking.ts"),
-      path.resolve(__dirname, "/css/ranking.scss"),
+      __dirname + "/js/ranking/ranking.ts",
+      __dirname + "/css/ranking.scss",
     ],
     scatter: [
-      path.resolve(__dirname, "/js/tools/scatter.js"),
-      path.resolve(__dirname, "/css/scatter.scss"),
+      __dirname + "/js/tools/scatter.js",
+      __dirname + "/css/scatter.scss",
     ],
-    search: path.resolve(__dirname, "/css/search.scss"),
-    static: path.resolve(__dirname, "/css/static.scss"),
+    search: __dirname + "/css/search.scss",
+    static: __dirname + "/css/static.scss",
     translator: [
-      path.resolve(__dirname, "/js/translator/translator.ts"),
-      path.resolve(__dirname, "/css/translator.scss"),
+      __dirname + "/js/translator/translator.ts",
+      __dirname + "/css/translator.scss",
     ],
   },
   output: {
-    path: path.resolve(__dirname, "../server/dist"),
+    path: path.resolve(__dirname, "../") + "/server/dist",
     filename: "[name].js",
   },
   resolve: {
     extensions: [".js", ".ts", ".tsx"],
-  },
-  optimization: {
-    minimize: true
   },
   module: {
     rules: [
@@ -81,11 +75,11 @@ const config = {
         exclude: /node_modules/,
         use: {
           loader: "babel-loader",
-        }
+        },
       },
       {
         test: /\.(ts|tsx)$/,
-        loader: "ts-loader",
+        use: "ts-loader",
         exclude: /node_modules/,
       },
       {
@@ -110,17 +104,15 @@ const config = {
     ],
   },
   plugins: [
-    new CopyPlugin(
-      {
-        "patterns": [
-            { from: "css/**/*.css" },
-            { from: "images/*" },
-            { from: "fonts/*" },
-            { from: "data/**/*" },
-            { from: "sitemap/*.txt" },
-            { from: "favicon.ico" },
-            { from: "robots.txt" },
-          ]}),
+    new CopyPlugin([
+      { from: "css/**/*.css" },
+      { from: "images/*" },
+      { from: "fonts/*" },
+      { from: "data/**/*" },
+      { from: "sitemap/*.txt" },
+      { from: "favicon.ico" },
+      { from: "robots.txt" },
+    ]),
     new FixStyleOnlyEntriesPlugin({
       silent: true,
     }),
@@ -129,14 +121,4 @@ const config = {
     }),
   ],
 };
-
-module.exports = (env, argv) => {
-
-  // If in "development", disable optimization.minimize.
-  // "development" and "production" are arguments.
-  if (argv.mode === 'development' && config.optimization.minimize) {
-    config.optimization.minimize = false;
-  }
-
-  return config;
-};
+module.exports = [config];
